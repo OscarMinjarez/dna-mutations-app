@@ -1,0 +1,57 @@
+<div *ngIf="!stats" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div *ngFor="let i of [1,2,3,4]" class="bg-white p-4 rounded shadow animate-pulse">
+        <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+        <div class="h-8 bg-gray-200 rounded w-1/2"></div>
+    </div>
+</div>
+
+<div *ngIf="stats" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="p-4 rounded text-white shadow bg-gradient-to-r from-blue-500 to-blue-600">
+        <div class="flex items-center text-sm font-medium mb-2">
+            <i class="fa-solid fa-wave-square mr-2 text-white/80"></i>
+            Total Analyses
+        </div>
+        <div class="text-3xl font-bold">
+            {{ totalAnalyses().toLocaleString() }}
+        </div>
+        <p class="text-sm text-blue-100 mt-1">DNA sequences processed</p>
+    </div>
+
+    <div class="p-4 rounded text-white shadow bg-gradient-to-r from-red-500 to-red-600">
+        <div class="flex items-center text-sm font-medium mb-2">
+            <i class="fa-solid fa-arrow-trend-up mr-2 text-white/80"></i>
+            Mutations Detected
+        </div>
+        <div *ngIf="stats">
+            {{ stats.count_mutations !== undefined ? stats.count_mutations.toLocaleString() : '0' }}
+        </div>
+
+        <p class="text-sm text-red-100 mt-1">
+            {{ mutationPercentage() }}% of total
+        </p>
+    </div>
+
+    <div class="p-4 rounded text-white shadow bg-gradient-to-r from-green-500 to-green-600">
+        <div class="flex items-center text-sm font-medium mb-2">
+            <i class="fa-solid fa-arrow-trend-down mr-2 text-white/80"></i>
+            Normal Sequences
+        </div>
+        <div class="text-3xl font-bold">
+            {{ stats.count_no_mutation.toLocaleString() }}
+        </div>
+        <p class="text-sm text-green-100 mt-1">
+            {{ (100 - +mutationPercentage()).toFixed(1) }}% of total
+        </p>
+    </div>
+
+    <div class="p-4 rounded text-white shadow bg-gradient-to-r from-purple-500 to-purple-600">
+        <div class="flex items-center text-sm font-medium mb-2">
+            <i class="fa-solid fa-chart-column mr-2 text-white/80"></i>
+            Mutation Ratio
+        </div>
+        <div class="text-3xl font-bold">
+            {{ stats.ratio.toFixed(3) }}
+        </div>
+        <p class="text-sm text-purple-100 mt-1">Mutations per analysis</p>
+    </div>
+</div>

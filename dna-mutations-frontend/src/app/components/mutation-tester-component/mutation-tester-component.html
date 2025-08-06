@@ -1,0 +1,48 @@
+<div class="p-4 shadow-md hover:shadow-lg transition">
+    <div class="flex flex-row items-center gap-2">
+        <i class="fa-solid fa-dna"></i>
+        <h1 class="font-bold">DNA Mutation Tester</h1>
+    </div>
+    <p class="font-light">Test a DNA sequence for mutations</p>
+
+    <div class="mt-6 flex flex-col">
+        <label class="text-sm font-medium">DNA Sequence (one per line)</label>
+        <textarea
+            [(ngModel)]="dnaInput"
+            class="mt-2 outline-1 outline-gray-300 resize-none p-2 font-mono text-sm placeholder:text-gray-400"
+            rows="8"
+            placeholder="Enter DNA sequences, one per line&#10;Example:&#10;ATGCGA&#10;CAGTGC&#10;TTATGT"
+        ></textarea>
+    </div>
+
+    <div class="mt-4 flex gap-2">
+        <button (click)="testMutation()"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
+            [disabled]="loading">
+            Check Mutation
+        </button>
+        <button (click)="clearInput()" class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 cursor-pointer">
+            Clear
+        </button>
+    </div>
+
+    <div *ngIf="loading" class="mt-4 text-blue-600">Checking DNA...</div>
+
+    <div *ngIf="result" class="mt-4 p-4 rounded-md"
+        [ngClass]="{
+            'bg-green-100 text-green-800': result.mutation === true,
+            'bg-red-100 text-red-800': result.mutation === false
+        }">
+        {{ result.message }}
+    </div>
+
+    <div class="mt-6" *ngIf="history.length > 0">
+        <h2 class="text-lg font-semibold">History</h2>
+        <ul class="mt-2 space-y-2">
+            <li *ngFor="let entry of history" class="bg-white p-3 rounded shadow text-sm">
+                <strong class="block text-gray-700">{{ entry.result }}</strong>
+                <code class="text-gray-500">{{ entry.dna.join(' ') }}</code>
+            </li>
+        </ul>
+    </div>
+</div>
