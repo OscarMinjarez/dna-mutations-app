@@ -23,9 +23,8 @@ export class MutationTesterComponent {
     const dna = this.dnaInput
       .trim()
       .split('\n')
-      .map(line => line.trim())
+      .map(line => line.trim().toUpperCase())
       .filter(line => line.length > 0);
-
     if (dna.length === 0) {
       this.result = { message: 'Please enter a DNA sequence.', mutation: null };
       return;
@@ -34,29 +33,37 @@ export class MutationTesterComponent {
     this.result = null;
     try {
       const response = await this.http
-        .post<{ has_mutation: boolean }>(`${this.apiUrl}/mutation`, { dna }, { observe: 'response' })
+        .post<{ message: string; mutation: boolean }>(`${this.apiUrl}/mutation`, { dna }, { observe: 'response' })
         .toPromise();
-
       if (response && response.body) {
-        const mutation = response.body.has_mutation;  // Aquí usas el valor real del backend
+        const mutation = response.body.mutation;
         this.result = {
-          message: mutation ? 'Mutation detected.' : 'No mutation found.',
+          message: response.body.message,
           mutation
         };
-
         this.history.unshift({
           dna,
           result: mutation ? 'Mutation' : 'No Mutation'
         });
+      } else {
+        this.result = { message: 'Unexpected response', mutation: null };
       }
     } catch (err: any) {
       if (err.status === 422) {
         this.result = { message: err.error?.error || 'Invalid data', mutation: null };
+      } else if (err.status === 403) {
+        this.result = {
+          message: err.error?.message || 'No mutation detected.',
+          mutation: false
+        };
       } else {
         this.result = { message: 'Server error', mutation: null };
       }
+    } finally {
+      this.loading = false;
     }
   }
+
 
   clearInput() {
     this.dnaInput = '';
