@@ -30,17 +30,15 @@ export class MutationTesterComponent {
       this.result = { message: 'Please enter a DNA sequence.', mutation: null };
       return;
     }
-
     this.loading = true;
     this.result = null;
-
     try {
       const response = await this.http
-        .post(`${this.apiUrl}/mutation`, { dna }, { observe: 'response' })
+        .post<{ has_mutation: boolean }>(`${this.apiUrl}/mutation`, { dna }, { observe: 'response' })
         .toPromise();
 
-      if (response) {
-        const mutation = response.status === 200;
+      if (response && response.body) {
+        const mutation = response.body.has_mutation;  // Aquí usas el valor real del backend
         this.result = {
           message: mutation ? 'Mutation detected.' : 'No mutation found.',
           mutation
@@ -57,8 +55,6 @@ export class MutationTesterComponent {
       } else {
         this.result = { message: 'Server error', mutation: null };
       }
-    } finally {
-      this.loading = false;
     }
   }
 
