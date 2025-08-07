@@ -12,7 +12,7 @@ export class RecentMutationsComponent {
 
   stats: any = null;
   loading: boolean = true;
-  apiUrl = 'http://localhost:8000/api';
+  apiUrl = 'https://dna-mutations.duckdns.org/api';
   sequences: any[] = [];
   pagination: any = {};
 

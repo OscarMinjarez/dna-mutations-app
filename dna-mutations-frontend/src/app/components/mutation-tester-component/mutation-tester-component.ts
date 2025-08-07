@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './mutation-tester-component.css'
 })
 export class MutationTesterComponent {
-  @Input() apiUrl = 'http://localhost:8000/api';
+  @Input() apiUrl = 'https://dna-mutations.duckdns.org/api';
   dnaInput: string = '';
   loading: boolean = false;
   result: any = null;

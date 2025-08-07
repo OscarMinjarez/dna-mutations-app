@@ -15,7 +15,7 @@ stats: {
     ratio: number;
   } | null = null;
 
-  apiUrl = 'http://localhost:8000/api';
+  apiUrl = 'https://dna-mutations.duckdns.org/api';
   loading = true;
 
   constructor(private http: HttpClient) {}
